@@ -26,12 +26,13 @@ const buildDataCard = details => {
 
 function parseMessage (message) {
   if (message.indexOf('Merge') !== -1) {
-    let fromName = /Merge branch \'([^\']+)\'/g.exec(message)
-    let from = fromName ? fromName[1]: 'from解析出错'
+    // let fromName = /Merge branch \'([^\']+)\'/g.exec(message)
+    // let from = fromName ? fromName[1]: 'from解析出错'
 
-    let toName = /into (.+)/g.exec(message)
-    let to = toName ? toName[1] : 'to解析出错'
-    return `Merge branch ${from} into ${to}`
+    // let toName = /into (.+)/g.exec(message)
+    // let to = toName ? toName[1] : 'to解析出错'
+    // to = to.replace(/\'/g, '')
+    return ''
   } else {
     return message.replace('/n', '')
   }
@@ -56,15 +57,19 @@ const buildDataMd = details => {
   let text = commits.reduce((pre, next) => {
     collectPublic(next.modified)
     msg = parseMessage(next.message)
-    name = next.author ? next.author.name : ''
-    pre += `> ${name}：[${msg}](${next.url})\n`
+
+    if (msg) {
+      name = next.author ? next.author.name : ''
+      pre += `- ${name}：[${msg}](${next.url})\n\n`
+    }
+    
     return pre
-  }, `${repository.name}代码更新：${count}/${total_commits_count}\n`)
+  }, `#### ${repository.name}代码更新：${count}/${total_commits_count}\n\n`)
 
   const modifiedFilesArray = Object.keys(modifiedFiles)
   const modifiedCount = modifiedFilesArray.length
   if (modifiedCount) {
-    text += `\n公共文件更新：${modifiedCount}\n`
+    text += `\n#### 公共文件更新：${modifiedCount}\n\n`
     text = modifiedFilesArray.reduce((pre, next) => {
       pre += `> ${next}\n`
       return pre
