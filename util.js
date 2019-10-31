@@ -38,11 +38,11 @@ const buildDataMd = details => {
   const { repository, commits, total_commits_count } = details
   const count = commits.length
 
-  let modifiedFiles = []
+  let modifiedFiles = {}
   function collectPublic (modified) {
     modified.forEach(item => {
       if (/(public)/g.exec(item)) {
-        modifiedFiles.push(item)
+        modifiedFiles[item] = 1
       }
     });
     return modifiedFiles
@@ -59,9 +59,11 @@ const buildDataMd = details => {
     return pre
   }, `${repository.name}代码更新：${count}/${total_commits_count}\n`)
 
-  if (modifiedFiles.length) {
-    text += '公共文件更新：${modifiedFiles.length}\n'
-    text = modifiedFiles.reduce((pre, next) => {
+  const modifiedFilesArray = Object.keys(modifiedFiles)
+  const modifiedCount = modifiedFilesArray.length
+  if (modifiedCount) {
+    text += `公共文件更新：${modifiedCount}\n`
+    text = modifiedFilesArray.reduce((pre, next) => {
       pre += `> ${next}\n`
     }, text)
   }
