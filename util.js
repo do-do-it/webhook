@@ -40,7 +40,7 @@ function parseMessage (message) {
 
 const buildDataMd = details => {
   const { repository, commits, total_commits_count } = details
-  const count = commits.length
+  let count = 0
 
   let modifiedFiles = {}
   function collectPublic (modified) {
@@ -59,6 +59,7 @@ const buildDataMd = details => {
     msg = parseMessage(next.message)
 
     if (msg) {
+      count++
       name = next.author ? next.author.name : ''
       pre += `- ${name}：[${msg}](${next.url})\n\n`
     }
