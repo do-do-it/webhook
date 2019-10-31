@@ -61,16 +61,16 @@ const buildDataMd = details => {
     if (msg) {
       count++
       name = next.author ? next.author.name : ''
-      pre += `- ${name}：[${msg}](${next.url})\n\n`
+      pre += `- ${name}：[${msg}](${next.url})\n`
     }
     
     return pre
-  }, `#### ${repository.name}代码更新：${count}/${total_commits_count}\n\n`)
+  }, `#### ${repository.name}代码更新：${count}/${total_commits_count}\n`)
 
   const modifiedFilesArray = Object.keys(modifiedFiles)
   const modifiedCount = modifiedFilesArray.length
   if (modifiedCount) {
-    text += `\n#### 公共文件更新：${modifiedCount}\n\n`
+    text += `\n#### 公共文件更新：${modifiedCount}\n`
     text = modifiedFilesArray.reduce((pre, next) => {
       pre += `> ${next}\n`
       return pre
