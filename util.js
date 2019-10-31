@@ -45,7 +45,6 @@ const buildDataMd = details => {
         modifiedFiles[item] = 1
       }
     });
-    return modifiedFiles
   }
 
   let msg = ''
@@ -65,6 +64,7 @@ const buildDataMd = details => {
     text += `公共文件更新：${modifiedCount}\n`
     text = modifiedFilesArray.reduce((pre, next) => {
       pre += `> ${next}\n`
+      return pre
     }, text)
   }
 
