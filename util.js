@@ -26,8 +26,11 @@ const buildDataCard = details => {
 
 function parseMessage (message) {
   if (message.indexOf('Merge') !== -1) {
-    let from = /Merge branch \'(.+)\' of/g.exec(message)[1]
-    let to = /into (.+)/g.exec(message)[1]
+    let fromName = /Merge branch \'([^\']+)\'/g.exec(message)
+    let from = fromName ? fromName[1]: 'from解析出错'
+
+    let toName = /into (.+)/g.exec(message)
+    let to = toName ? toName[1] : 'to解析出错'
     return `Merge branch ${from} into ${to}`
   } else {
     return message.replace('/n', '')
