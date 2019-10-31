@@ -6,5 +6,9 @@ module.exports = [
   {
     path: '/cdn',
     secret: 'q1w2e3r4'
+  },
+  {
+    path: '/webhook',
+    secret: 'webhook5820'
   }
 ]
