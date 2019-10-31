@@ -22,15 +22,50 @@ const buildDataCard = details => {
     msgtype: 'actionCard'
   }
   return data
+} 
+
+function parseMessage (message) {
+  if (message.indexOf('Merge')) {
+    let from = /Merge branch \'(.+)\' of/g.exec(msg)[1]
+    let to = /into (.+)/g.exec(msg)[1]
+    return `Merge branch ${from} into ${to}`
+  } else {
+    return message.replace('/n', '')
+  }
 }
 
 const buildDataMd = details => {
   const { repository, commits, total_commits_count } = details
-  const count = commits.length > 5 ? 5 : commits.length
-  const text = commits.reduce((pre, next) => {
-    pre += `> [${next.message}](${next.url})\n`
+  const count = commits.length
+
+  let modifiedFiles = []
+  function collectPublic (modified) {
+    modified.forEach(item => {
+      if (/(public)/g.exec(item)) {
+        modifiedFiles.push(item)
+      }
+    });
+    return modifiedFiles
+  }
+
+  let msg = ''
+  let name = ''
+
+  let text = commits.reduce((pre, next) => {
+    collectPublic(next.modified)
+    msg = parseMessage(next.message)
+    name = next.author ? next.author.name : ''
+    pre += `> ${name}：[${msg}](${next.url})\n`
     return pre
   }, `${repository.name}代码更新：${count}/${total_commits_count}\n`)
+
+  if (modifiedFiles.length) {
+    text += '公共文件更新：${modifiedFiles.length}\n'
+    text = modifiedFiles.reduce((pre, next) => {
+      pre += `> ${next}\n`
+    }, text)
+  }
+
   const data = {
     msgtype: 'markdown',
     markdown: {
@@ -42,6 +77,7 @@ const buildDataMd = details => {
       isAtAll: false
     }
   }
+
   return data
 }
 
