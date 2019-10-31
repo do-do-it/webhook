@@ -61,7 +61,7 @@ const buildDataMd = details => {
   const modifiedFilesArray = Object.keys(modifiedFiles)
   const modifiedCount = modifiedFilesArray.length
   if (modifiedCount) {
-    text += `公共文件更新：${modifiedCount}\n`
+    text += `\n公共文件更新：${modifiedCount}\n`
     text = modifiedFilesArray.reduce((pre, next) => {
       pre += `> ${next}\n`
       return pre
