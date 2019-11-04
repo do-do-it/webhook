@@ -65,7 +65,9 @@ const buildDataMd = details => {
     }
     
     return pre
-  }, `#### ${repository.name}代码更新：${count}/${total_commits_count}\n`)
+  }, '')
+
+  text = `#### ${repository.name}代码更新：${count}/${total_commits_count}\n` + text
 
   const modifiedFilesArray = Object.keys(modifiedFiles)
   const modifiedCount = modifiedFilesArray.length
